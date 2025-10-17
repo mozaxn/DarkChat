@@ -17,6 +17,9 @@ from spinner import Spinner
 TERMINAL_WIDTH = shutil.get_terminal_size().columns
 VERSION = "0.1.0"
 
+priv_key_file = ""
+pub_key_file = ""
+
 # Initialise colorama
 init(autoreset=True)
 
@@ -69,6 +72,7 @@ while True:
                 print(Style.BRIGHT + Back.RED + "[ERROR]" + Style.RESET_ALL + Fore.RED + " The file either doesn't exist or is corrupted!\n" + Style.RESET_ALL)
             else:
                 print(Style.BRIGHT + Back.GREEN + "[SUCCESS]" + Style.RESET_ALL + "Found PRIVATE KEY! Fingerprint: " + Fore.BLUE + priv_key[0] + Style.RESET_ALL)
+                priv_key_file = sk_file
                 exists = 1
         
         else:
@@ -78,6 +82,9 @@ while True:
             
             fingerprint = pgp.create_pgp(name, email, passphrase=password)
             if fingerprint:
+                priv_key_file = "DarkChat/" + name + "_PRIVATE.asc"
+                pub_key_file = "DarkChat/" + name + "_PUBLIC.asc"
+                
                 print(Style.BRIGHT + Back.GREEN + "[SUCCESS]" + Style.RESET_ALL + " PGP Keys have been created. Key Fingerprint: " + Fore.BLUE + fingerprint + Style.RESET_ALL)
                 exists = 1
             else:

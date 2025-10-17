@@ -6,6 +6,9 @@ __pycache__/
 # C extensions
 *.so
 
+# DarkChat folders
+DarkChat/
+
 # Distribution / packaging
 .Python
 build/
