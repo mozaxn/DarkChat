@@ -1,6 +1,6 @@
 import socket
 
-def connection_req(host, port, pub_key):
+def connection_req(host, port):
 
     # Create a TCP socket
     client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)

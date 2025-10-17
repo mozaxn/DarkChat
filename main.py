@@ -42,7 +42,7 @@ while True:
     # Broadcasting your availability to LAN
     if exists == 1:
         stop_event = threading.Event()
-        t = threading.Thread(target=broadcast.broadcaster, args=(stop_event, broadcast_port), daemon=True)
+        t = threading.Thread(target=broadcast.broadcaster, args=(stop_event, broadcast_port, PK), daemon=True)
         t.start()
     
     # Asking for input indefinitely
@@ -60,19 +60,26 @@ while True:
 
     # Prompting for private key
     if command == 'init' and exists == 0:
-        existing = input("Do you have any existing PRIVATE KEY provided by DarkChat? (Y/N): ")
+        existing = input("Do you have any existing KEYS provided by DarkChat? (Y/N): ")
         if existing.strip().upper() == "Y":
             
             sk_file = input("Enter the path to the PRIVATE KEY: ")
             passphrase = input("Enter PASSPHRASE: ")
+            pk_file = input("Enter path to the PUBLIC KEY file: ")
+            
             
             priv_key = pgp.find_priv_key(sk_file, passphrase)
+            public_key = pgp.find_pub_key(pk_file)
             
             if priv_key == False:
                 print(Style.BRIGHT + Back.RED + "[ERROR]" + Style.RESET_ALL + Fore.RED + " The file either doesn't exist or is corrupted!\n" + Style.RESET_ALL)
             else:
                 print(Style.BRIGHT + Back.GREEN + "[SUCCESS]" + Style.RESET_ALL + "Found PRIVATE KEY! Fingerprint: " + Fore.BLUE + priv_key[0] + Style.RESET_ALL)
                 priv_key_file = sk_file
+                pub_key_file = pk_file
+                
+                PK = public_key
+                SK = priv_key[1]
                 exists = 1
         
         else:
@@ -106,5 +113,4 @@ while True:
     
     elif command.split()[0] == 'chat' and len(command.split()) == 2:
         host = command.split()[1]
-        pub_key = open(input("Enter host's public key file: "), "r").read()
-        connect.connection_req(host, 7887, pub_key)
+        connect.connection_req(host, 7887)

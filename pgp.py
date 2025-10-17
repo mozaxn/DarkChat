@@ -27,6 +27,17 @@ def find_priv_key(file, passphrase):
     except:
         return False
     
+def find_pub_key(file):
+    gpg = gnupg.GPG()
+
+    # Read the public key from file
+    with open(file, "r") as f:
+        key_data = f.read()
+
+    # Import it into GPG
+    import_result = gpg.import_keys(key_data)
+    return gpg.export_keys(import_result.fingerprints[0])
+
 def create_pgp(name, email, comment='', passphrase=''):
     gpg = gnupg.GPG() 
 
